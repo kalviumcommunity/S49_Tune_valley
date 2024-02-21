@@ -33,7 +33,7 @@ app.get('/ping', (req, res) => {
   });
 });
 
-process.on('SIGINT', async () => {
+process.on('SIGINT', async () => {z
   await stopDatabase();
   process.exit(0);
 });

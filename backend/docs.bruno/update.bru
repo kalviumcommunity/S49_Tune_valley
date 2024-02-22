@@ -4,8 +4,12 @@ meta {
   seq: 3
 }
 
-put {
-  url: http://localhost:3000/update/:id
-  body: <your request body here>
-  auth: <authentication details if required>
+patch {
+  url: http://localhost:8000/crud/update/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {"name":"venkey"}
 }

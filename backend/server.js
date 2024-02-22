@@ -1,39 +1,56 @@
 const express = require('express');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser'); // middleware for parsing request bodies
 const app = express();
-require('dotenv').config()
+require('dotenv').config();
 const port = process.env.PUBLIC_PORT || 8000;
 
-const startDatabase = async() =>{
-  try{
-    await mongoose.connect(process.env.API_LINK)
-    console.log("connected")
-  }catch(err){
-    console.error(err)
-  }
-}
+// Import CRUD routes
+const router = require('./routes.js');
 
-const stopDatabase = async() =>{
-  try{
-    await mongoose.disconnect()
-    console.log("disconnected")
-  }catch(err){
-    console.error(err)
-  }
-}
+// Middleware for parsing request bodies
+app.use(bodyParser.json());
 
+app.use("/crud",router)
+
+// Connect to MongoDB
+const startDatabase = async () => {
+  try {
+    await mongoose.connect(process.env.API_LINK, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('Connected to MongoDB');
+  } catch (err) {
+    console.error('Error connecting to MongoDB:', err);
+  }
+};
+
+// Disconnect from MongoDB
+const stopDatabase = async () => {
+  try {
+    await mongoose.disconnect();
+    console.log('Disconnected from MongoDB');
+  } catch (err) {
+    console.error('Error disconnecting from MongoDB:', err);
+  }
+};
+
+// Check MongoDB connection status
 const isConnected = () => {
   return mongoose.connection.readyState === 1;
 };
 
+// Ping route to check server status
 app.get('/ping', (req, res) => {
   res.json({
-    message: 'o_O',
-    database: isConnected() ? 'connected' : 'disconnected'
+    message: 'Server is running',
+    database: isConnected() ? 'connected' : 'disconnected',
   });
 });
 
-process.on('SIGINT', async () => {z
+// Handle shutdown signals
+process.on('SIGINT', async () => {
   await stopDatabase();
   process.exit(0);
 });
@@ -43,9 +60,12 @@ process.on('SIGTERM', async () => {
   process.exit(0);
 });
 
+// Start the server
 if (require.main === module) {
   app.listen(port, async () => {
     await startDatabase();
-    console.log(`🚀 Server running on PORT: ${port}`);
+    console.log(`Server running on PORT: ${port}`);
   });
 }
+
+module.exports = app;

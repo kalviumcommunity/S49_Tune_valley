@@ -5,7 +5,12 @@ meta {
 }
 
 post {
-  url: http://localhost:3000/create
-  body: <your request body here>
-  auth: <authentication details if required>
+  url: http://localhost:8000/crud/create
+  body: json
+  auth: none
+}
+
+body:json {
+  {"name":"rutuj ",
+  "discription":"somethinggggg"}
 }

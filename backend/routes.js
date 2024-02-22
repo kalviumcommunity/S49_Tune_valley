@@ -1,25 +1,46 @@
 const express = require('express');
 const router = express.Router();
-const createRequest = require('./create.bru');
-const readRequest = require('./read.bru');
-const updateRequest = require('./update.bru');
-const deleteRequest = require('./delete.bru');
 
+// Mock data for demonstration
+let data = [
+    { id: 1, name: 'BALA', age: 17 },
+    { id: 2, name: 'MAANYA', age: 14 },
+    { id: 3, name: 'ABEL', age: 40 }
+];
 
-router.use('/create', (req, res) => {
-    createRequest.execute(req, res);
+// CRUD operations
+router.post('/create', (req, res) => {
+    const newItem = req.body; // assuming the body contains the new item to be added
+    newItem.id = data.length + 1;
+    data.push(newItem);
+    res.json(newItem);
 });
 
-router.use('/read', (req, res) => { 
-    readRequest.execute(req, res);
+router.get('/read', (req, res) => {
+    res.json(data);
 });
 
-router.use('/update/:id', (req, res) => {  
-    updateRequest.execute(req, res);
+router.put('/update/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const updateItem = req.body; // assuming the body contains the updated item
+    const index = data.findIndex(item => item.id === id);
+    if (index !== -1) {
+        data[index] = { ...data[index], ...updateItem };
+        res.json(data[index]);
+    } else {
+        res.status(404).json({ message: 'Item not found' });
+    }
 });
 
-router.use('/delete/:id', (req, res) => {
-    deleteRequest.execute(req, res);
+router.delete('/delete/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const index = data.findIndex(item => item.id === id);
+    if (index !== -1) {
+        const deletedItem = data.splice(index, 1);
+        res.json(deletedItem);
+    } else {
+        res.status(404).json({ message: 'Item not found' });
+    }
 });
 
 module.exports = router;

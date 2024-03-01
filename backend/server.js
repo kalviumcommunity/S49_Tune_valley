@@ -1,5 +1,4 @@
 require('dotenv').config();
-
 const express = require('express');
 const mongoose = require('mongoose');
 const MONGODB_URL = process.env.MONGODB_URL;
@@ -13,6 +12,8 @@ const router = require('./routes.js');
 
 // Import Model
 const TunevalleyModel = require('./models/Tunevalley.js');
+const TunevalleyUserModel = require('./models/Users.js')
+
 
 // Middleware for parsing request bodies
 // app.use(bodyParser.json());
@@ -74,6 +75,26 @@ app.get(`/getTunevalley`, async (req,res) =>{
   .catch(err => res.json(err))
 })
 
+app.post(`/postUserData`, async (req,res) =>{
+  let x= req.body
+  console.log(x)
+    let a =await TunevalleyUserModel.create({
+    Email : x.email,
+    Favourite_Artist: x.favoriteArtist,
+    Genre:x.genre,
+    Name: x.name
+    })
+   .then(users => res.json(users))
+   .catch(err => res.json(err))
+   console.log(a)
+ })
+
+app.get(`/getUserData`,async(req,res) =>{
+  let b = await TunevalleyUserModel.find()
+  .then(users => res.json(users))
+  .catch(err => res.json(err))
+  console.log(b)
+})
 // Start the server
 if (require.main === module) {
   app.listen(port, async () => {

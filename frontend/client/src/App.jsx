@@ -1,40 +1,58 @@
-import React from 'react'
-import './App.css'
-import Home from './components/Home.jsx'
-import Data from './components/Data.jsx'
-import { useEffect, useState } from 'react'
-import axios from 'axios'
+import React, { useState, useEffect } from 'react';
+import './App.css';
+import axios from 'axios';
+import UserProfile from './components/UserProfile';
 
 function App() {
+  const [data, setData] = useState([]);
+  const [showForm, setShowForm] = useState(false);
 
-  let [data, setData] = useState([])
-
-  useEffect(()=>{
+  useEffect(() => {
     axios.get('http://localhost:8000/getTunevalley')
-         .then(res => setData(res.data))
-         .catch((err)=> console.error(err))
-  },[])
+      .then(res => setData(res.data))
+      .catch((err) => console.error(err));
+  }, []);
+
+  useEffect(() => {
+   let i = axios.post('http://localhost:8000/postUserData')
+      console.log(i)
+  }, []);
+
+  const handleUserProfileClick = () => {
+    setShowForm(true);
+  };
+
+  const closeModal = () => {
+    setShowForm(false);
+  };
+
   return (
     <>
-      <Home/>
-      {/* <Data/> */}
-      <div>{data && data.map((item)=>{
-        return(
+      <nav className="navbar">
+        <span className="navbar-brand">TUNE VALLEY 🎹</span>
+        <a href="#" onClick={handleUserProfileClick}>User Profile</a>
+      </nav>
+
+      <UserProfile isOpen={showForm} closeModal={closeModal} />
+
+      <div>
+        {data && data.map((item) => (
           <div key={item._id}>
-            <h2 id='year'>Year:{item.Year}</h2> <hr />
-            <div>{item.Songs && item.Songs.map((itt)=>{
-              return(
-                <div key={itt._id}>
-                  <p>Song: {itt.Song}</p>
-                  <p>Artist: {itt.Artist}</p>
+            <h2 id='year'>Year: {item.Year}</h2>
+            <hr />
+            <div>
+              {item.Songs && item.Songs.map((song) => (
+                <div key={song._id}>
+                  <p>Song: {song.Song}</p>
+                  <p>Artist: {song.Artist}</p>
                 </div>
-              )
-            })}</div>
+              ))}
+            </div>
           </div>
-        )
-      })}</div>
+        ))}
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

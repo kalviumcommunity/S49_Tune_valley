@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import './App.css';
 import axios from 'axios';
 import UserProfile from './components/UserProfile';
+import Year from './components/Year';
+import Fav from './components/Fav';
+import CreateFav from './components/CreateFav';
+import FavUpdate from './components/FavUpdate';
 
 function App() {
   const [data, setData] = useState([]);
@@ -13,10 +18,6 @@ function App() {
       .catch((err) => console.error(err));
   }, []);
 
-  useEffect(() => {
-   let i = axios.post('http://localhost:8000/postUserData')
-      console.log(i)
-  }, []);
 
   const handleUserProfileClick = () => {
     setShowForm(true);
@@ -31,26 +32,18 @@ function App() {
       <nav className="navbar">
         <span className="navbar-brand">TUNE VALLEY 🎹</span>
         <a href="#" onClick={handleUserProfileClick}>User Profile</a>
+        <a href='fav'>Fav</a>
+ 
       </nav>
-
       <UserProfile isOpen={showForm} closeModal={closeModal} />
-
-      <div>
-        {data && data.map((item) => (
-          <div key={item._id}>
-            <h2 id='year'>Year: {item.Year}</h2>
-            <hr />
-            <div>
-              {item.Songs && item.Songs.map((song) => (
-                <div key={song._id}>
-                  <p>Song: {song.Song}</p>
-                  <p>Artist: {song.Artist}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
+       {/* <Year data={data}/> */}
+      <BrowserRouter>
+      <Routes>
+        <Route path='/fav' element={<Fav/>} ></Route>
+        <Route path='/create' element={<CreateFav/>} ></Route>
+        <Route path='/update/:id' element={<FavUpdate />} ></Route>
+      </Routes>
+      </BrowserRouter>
     </>
   );
 }

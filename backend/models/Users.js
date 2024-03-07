@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 
 const TunevalleyUserSchema = new mongoose.Schema({
+    Name: String,
     Email : String,
-    Favourite_Artist: String,
-    Genre: String,
-    Name: String
+    password: String
 
 })
 

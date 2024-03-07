@@ -10,8 +10,7 @@ function UserProfile({ isOpen, closeModal }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    favoriteArtist: '',
-    genre: ''
+    password: ''
   });
 
   const handleChange = (e) => {
@@ -49,10 +48,8 @@ function UserProfile({ isOpen, closeModal }) {
           <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
           <label>Email:</label>
           <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
-          <label>Favorite Artist:</label>
-          <input type="text" id="favoriteArtist" name="favoriteArtist" value={formData.favoriteArtist} onChange={handleChange} required />
-          <label >Genre:</label>
-          <input type="text" id="genre" name="genre" value={formData.genre} onChange={handleChange} required />
+          <label>password</label>
+          <input type="" id="password" name="password" value={formData.password} onChange={handleChange} required />
           <button type="submit" onClick={handleSubmit} >Save Profile</button>
           <button type="button" onClick={closeModal}>Close</button>
         </form>

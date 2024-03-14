@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const Joi = require('joi')
 const MONGODB_URL = process.env.MONGODB_URL;
 // const bodyParser = require('body-parser'); // middleware for parsing request bodies
 const app = express();
@@ -77,9 +78,57 @@ app.get(`/getTunevalley`, async (req,res) =>{
   console.log(x)
 })
 
-app.post(`/postUserData`, async (req,res) =>{
+// Joi validation for user data
+
+
+// app.post('/user/data', (req, res) => {
+//   // const error = schema.validate(req.body)
+//   console.log(req.body)
+//   // if(error){
+//   //   return res.status(400).json({error:error.details[0].message})
+//   // }
+  
+//   res.json({message:"data recieved successsfully"}); 
+// });
+
+
+
+// app.post('/fav/data', (req, res) => {
+//   const {error} = favSchema.validate(req.body)
+//   if(error){
+//     return res.status(400).json({error:error.details[0].message})
+//   }
+  
+//   res.json({message:"Fav data recieved successsfully"}); 
+// });
+
+
+
+app.put('/update/data', (req, res) => {
+  const {error} = updateFavSchema.validate(req.body)
+  if(error){
+    return res.status(400).json({error:error.details[0].message})
+  }
+  
+  res.json({message:"Updated Fav data recieved successsfully"}); 
+});
+
+
+const schema = Joi.object({
+  name:Joi.string().required(),
+  email:Joi.string().required(),
+  password:Joi.string().min(6).required()
+})
+
+app.post('/postUserData', async (req,res) =>{
   let x= req.body
-  console.log(x)
+  console.log("data",x)
+  const {error} = schema.validate(req.body)
+  if(error){
+    console.log(error.details[0].message,"sfsf")
+    return res.status(400).send({"message":error.details[0].message})
+  }
+  
     let a =await TunevalleyUserModel.create({
     Name: x.name,
     Email : x.email,
@@ -91,6 +140,7 @@ app.post(`/postUserData`, async (req,res) =>{
  })
 
 app.get(`/getUserData`,async(req,res) =>{
+
   let b = await TunevalleyUserModel.find()
   .then(users => res.json(users))
   .catch(err => res.json(err))
@@ -98,13 +148,28 @@ app.get(`/getUserData`,async(req,res) =>{
 })
 
 //FAV
-app.post("/createFav", async(req,res) =>{
-  await FavsModel.create(req.body)
-  .then(favs => res.json(favs))
-  .catch(err => res.json(err))
+// Joi validation for favourite details
+const favSchema = Joi.object({
+  Artist:Joi.string().required(),
+  Song:Joi.string().required(),
+ Album:Joi.string().required(),
 })
 
-app.get("/", async(req,res) =>{
+app.post("/createFav", async(req,res) =>{
+  // let x= req.body
+  // console.log("data",x)
+  const {error} = favSchema.validate(req.body)
+  if(error){
+    console.log(error.details[0].message,"vwsd")
+    return res.status(400).send({"message":error.details[0].message})
+  }
+
+await FavsModel.create(req.body)
+.then(favs => res.json(favs))
+.catch(err => res.json(err))
+})
+
+app.get("/fav", async(req,res) =>{
   let f = await FavsModel.find()
   res.send(f);
 })
@@ -115,15 +180,28 @@ app.get('/getFav/:id',(req,res) =>{
   .then(favs => res.json(favs))
   .catch(err=>res.json(err))
 })
-
+//Joi validation for update user details
+const updateFavSchema = Joi.object({
+  Artist:Joi.string().required(),
+  Song:Joi.string().required(),
+ Album:Joi.string().required(),
+})
 app.put('/updateFav/:id',(req,res)=>{
+  const {error} = updateFavSchema.validate(req.body)
+  if(error){
+    console.log(error.details[0].message,"vwsd")
+    return res.status(400).send({"message":error.details[0].message})
+  }
+
+
   const id = req.params.id;
-  FavsModel.findByIdAndUpdate({_id:id},{
-    Artist:req.body.Artist,
-    Song: req.body.Song,
-    Album: req.body.Album})
-  .then(favs => res.json(favs))
-  .catch(err => res.json(err))  })
+   FavsModel.findByIdAndUpdate({_id:id},{
+     Artist:req.body.Artist,
+     Song: req.body.Song,
+     Album: req.body.Album})
+   .then(favs => res.json(favs))
+   .catch(err => res.json(err))  
+})
 
   app.delete('/deleteFav/:id', (req,res) =>{
     const id = req.params.id;

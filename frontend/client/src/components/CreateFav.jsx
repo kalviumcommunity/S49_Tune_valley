@@ -12,9 +12,10 @@ function CreateFav() {
         e.preventDefault();
         axios.post("http://localhost:8000/createFav",{Artist,Song,Album})
         .then(result => {console.log(result)
-        navigate('/')
+        navigate('/fav')
     })
-        .catch(err => console.log(err))
+
+        .catch(err => alert(err.response.data.message)) 
     }
   return (
     <div>
@@ -22,7 +23,7 @@ function CreateFav() {
             <form onSubmit={Submit} >
                 <h2>Add Favourites</h2>
                 <div>
-                    <label htmlFor="">Artist</label>
+                    <label htmlFor="">Artist</label> 
                     <input type="text" className='form-control' 
                     onChange={(e) => setArtist(e.target.value)} />
                 </div>

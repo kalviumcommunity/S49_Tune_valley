@@ -11,11 +11,7 @@ function FavUpdate() {
      
     useEffect(() =>{
         axios.get('http://localhost:8000/getFav/'+id)
-       .then(result => {console.log(result) 
-          setArtist(result.data.Artist);
-          setSong(result.data.Song);
-          setAlbum(result.data.Album)
-    })
+        .then(result=> console.log(result))
      .catch(err => console.log(err))
    
      },[])
@@ -23,11 +19,11 @@ function FavUpdate() {
      const Update = (e) =>{
         e.preventDefault();
         axios.put("http://localhost:8000/updateFav/"+id,{Artist,Song,Album})
-        .then(result =>{
-            console.log(result)
+        .then(
+          console.log(Artist, Song, Album),
             navigate('/fav')
-        })
-        .catch(err => console.log(err))
+          )
+        .catch(err => alert(err.response.data.message))
     }
 
 
@@ -46,7 +42,7 @@ function FavUpdate() {
              <div className='' >
                 <label htmlFor="">Song</label>
                 <input type="text"className='form-control' 
-                value={Song}   onChange={(e) => setSong(e.target.value)}/>
+                value={Song}  onChange={(e) => setSong(e.target.value)}/>
     
              </div>
              <div className=''>
@@ -54,7 +50,7 @@ function FavUpdate() {
                 <input type="text" className='form-control' 
                 value={Album}  onChange={(e) => setAlbum(e.target.value)} />
              </div>
-             <button className='btn btn-success'>Update</button>
+             <button className='btn btn-success' onClick={Update}>Update</button>
         </form>
     </div>
 </div>

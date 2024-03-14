@@ -29,7 +29,8 @@ function UserProfile({ isOpen, closeModal }) {
       const userDataResponse = await axios.get('http://localhost:8000/getUserData');
       console.log('User data:', userDataResponse.data);
     } catch (error) {
-      console.error('Error saving user profile:', error);
+      alert(error.response.data.message)
+       console.log(error.response.data.message,"zxczxczxczxczxc")
     }
   };
   

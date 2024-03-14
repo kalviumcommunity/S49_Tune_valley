@@ -8,7 +8,7 @@ function Fav() {
   const [favs , setFavs] = useState([])
   
   useEffect(() =>{
-     axios.get('http://localhost:8000/')
+     axios.get('http://localhost:8000/fav')
     .then(result => {
       setFavs(result.data)
       console.log(favs)
@@ -18,8 +18,7 @@ function Fav() {
 
   const handleDelete =(id) => {
     axios.delete(`http://localhost:8000/deleteFav/${id}`)
-      window.location="/fav"
-
+      window.location="/fav"    
   }
 
   return (

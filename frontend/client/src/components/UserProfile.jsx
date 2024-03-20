@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Modal from 'react-modal';
-import "./UserProfile.css"
+import { Link, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import "./UserProfile.css";
 
-// Set the app element for react-modal
-Modal.setAppElement('#root');
-
-function UserProfile({ isOpen, closeModal }) {
+function UserProfile() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: ''
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,41 +20,51 @@ function UserProfile({ isOpen, closeModal }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Send the form data to the specified API endpoint
       const Response = await axios.post('http://localhost:8000/postUserData', formData);
+      console.log(Response.data);
+      console.log('username0001', formData.email);
+      Cookies.set('useremail', formData.email);
+      // localStorage.setItem('userLocalStorage', formData.email)
       alert('User profile saved successfully!');
-      closeModal();
-
-      // Fetch the user data after saving
       const userDataResponse = await axios.get('http://localhost:8000/getUserData');
       console.log('User data:', userDataResponse.data);
+      console.log("cookie", Cookies.get('useremail')); // Logging the cookie value
+      // console.log("Local storage", localStorage.getItem(userLocalStorage))
+      console.log(formData.email);
+      navigate('/year') // Navigate to '/year' route
     } catch (error) {
-      alert(error.response.data.message)
-       console.log(error.response.data.message,"zxczxczxczxczxc")
+      alert(error.response.data.message); // Displaying the error message
+      console.log(error.response.data.message);
     }
   };
-  
+
+  const handleSignOut = () => {
+    Cookies.remove('useremail'); // Remove the 'useremail' cookie
+    // localStorage.removeItem(userLocalStorage)
+    console.log("cookie", Cookies.get('useremail'));
+    // console.log("Local Storage", localStorage.getItem(userLocalStorage));
+    navigate('/year'); // Navigate to '/year' route
+  };
 
   return (
     <div>
-      <Modal
-        className="user-profile-form"
-        isOpen={isOpen}
-        onRequestClose={closeModal}
-        contentLabel="User Profile Modal"
-      >
-        <h2>User Profile</h2>
-        <form onSubmit={handleSubmit}>
-          <label>Name:</label>
-          <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
-          <label>Email:</label>
-          <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
-          <label>password</label>
-          <input type="" id="password" name="password" value={formData.password} onChange={handleChange} required />
-          <button type="submit" onClick={handleSubmit} >Save Profile</button>
-          <button type="button" onClick={closeModal}>Close</button>
-        </form>
-      </Modal>
+      {!Cookies.get('useremail') ? (
+        <div>
+          <h2>User Profile</h2>
+          <form onSubmit={handleSubmit}>
+            <label>Name:</label>
+            <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
+            <label>Email:</label>
+            <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
+            <label>Password:</label>
+            <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required />
+            <button type="submit">Save Profile</button>
+            <Link to="/year"><button type="button">Close</button></Link>
+          </form>
+        </div>
+      ) : (
+        <button type="button" onClick={handleSignOut}>Sign Out</button>
+      )}
     </div>
   );
 }

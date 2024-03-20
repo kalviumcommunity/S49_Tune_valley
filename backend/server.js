@@ -60,16 +60,6 @@ app.get('/ping', (req, res) => {
   });
 });
 
-// Handle shutdown signals
-process.on('SIGINT', async () => {
-  await stopDatabase();
-  process.exit(0);
-});
-
-process.on('SIGTERM', async () => {
-  await stopDatabase();
-  process.exit(0);
-});
 
 app.get(`/getTunevalley`, async (req,res) =>{
  let x = await TunevalleyModel.find()
@@ -79,30 +69,6 @@ app.get(`/getTunevalley`, async (req,res) =>{
 })
 
 // Joi validation for user data
-
-
-// app.post('/user/data', (req, res) => {
-//   // const error = schema.validate(req.body)
-//   console.log(req.body)
-//   // if(error){
-//   //   return res.status(400).json({error:error.details[0].message})
-//   // }
-  
-//   res.json({message:"data recieved successsfully"}); 
-// });
-
-
-
-// app.post('/fav/data', (req, res) => {
-//   const {error} = favSchema.validate(req.body)
-//   if(error){
-//     return res.status(400).json({error:error.details[0].message})
-//   }
-  
-//   res.json({message:"Fav data recieved successsfully"}); 
-// });
-
-
 
 app.put('/update/data', (req, res) => {
   const {error} = updateFavSchema.validate(req.body)

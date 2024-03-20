@@ -15,7 +15,7 @@ function CreateFav() {
         navigate('/fav')
     })
 
-        .catch(err => alert(err.response.data.message)) 
+        .catch(err => console.log(err.response)) 
     }
   return (
     <div>

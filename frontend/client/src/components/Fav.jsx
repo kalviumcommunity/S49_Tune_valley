@@ -1,6 +1,7 @@
 import React , {useState , useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import './Fav.css';
 import axios from 'axios';
 
 
@@ -22,15 +23,17 @@ function Fav() {
   }
 
   return (
-    <div style={{color:"black"}}>
+    <div   className='container' >
       <div>
-        <Link to="/create" className='btn btn-success' style={{color:"black"}}>Add +</Link>
+        <Link to="/create" className='add'>Add +</Link>
         <table className='table' >
           <thead>
             <tr>
-              <th>Artist</th>
-              <th>song</th>
-              <th>Album</th>
+              <th id='artist'  >Artist</th>
+              <th id='song' >song</th>
+              <th id='album' >Album</th> 
+              <th>Update/Delete</th>
+              
             </tr>
           </thead>
           <tbody>
@@ -43,8 +46,8 @@ function Fav() {
                 
                   <td>{fav.Album}</td>
                   
-                  <td><Link to={`/update/${fav._id}`} className='btn btn-success' style={{color:"black"}} >update</Link>
-                  <button   className='btn btn-danger' onClick={(e) => handleDelete(fav._id)} >Delete</button>
+                  <td><Link to={`/update/${fav._id}`} className='btn btn-success' >update</Link>
+                  <button   className='delete' onClick={(e) => handleDelete(fav._id)} ><b>Delete</b></button>
                   </td>
                 </tr>
 

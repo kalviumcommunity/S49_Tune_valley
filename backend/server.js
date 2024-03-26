@@ -52,17 +52,25 @@ const generateAccessToken = (email) => {
 // Joi validation for user data
 const userSchema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().required(),
+  email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
 });
 
 // Create user route with JWT token generation
 app.post('/postUserData', async (req, res) => {
-  let userData = req.body;
   try {
+    let userData = req.body;
+    console.log(userData);
+    
+    // Check if user with the same email already exists
+    const existingUser = await TunevalleyUserModel.findOne({ Email: userData.email });
+    if (existingUser) {
+      return res.status(400).send({ message: "User already exists" });
+    }
+
     const { error } = userSchema.validate(userData);
     if (error) {
-      return res.status(400).send({ "message": error.details[0].message });
+      return res.status(400).send({ message: error.details[0].message });
     }
     
     const newUser = await TunevalleyUserModel.create({
@@ -80,7 +88,7 @@ app.post('/postUserData', async (req, res) => {
 });
 
 // Protected route for getting user data
-app.get(`/getUserData`, authenticateToken, async (req, res) => {
+app.get(`/getUserData`, async (req, res) => {
   try {
     const users = await TunevalleyUserModel.find();
     res.json(users);
@@ -89,6 +97,8 @@ app.get(`/getUserData`, authenticateToken, async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
+
 
 // Middleware for verifying JWT token
 function authenticateToken(req, res, next) {
@@ -115,7 +125,7 @@ app.get(`/getTunevalley`, async (req, res) => {
 });
 
 // Route for updating favourite data
-app.put('/update/data', authenticateToken, async (req, res) => {
+app.put('/update/data', async (req, res) => {
   try {
     // Assuming you receive the updated favourite data in req.body
     // Your logic to update favourite data in the database
@@ -127,7 +137,7 @@ app.put('/update/data', authenticateToken, async (req, res) => {
 });
 
 // Route for creating favourite data
-app.post("/createFav", authenticateToken, async (req, res) => {
+app.post("/createFav", async (req, res) => {
   try {
     // Assuming you receive the new favourite data in req.body
     const newFavourite = await FavsModel.create(req.body);
@@ -139,7 +149,7 @@ app.post("/createFav", authenticateToken, async (req, res) => {
 });
 
 // Route for getting all favourite data
-app.get("/fav", authenticateToken, async (req, res) => {
+app.get("/fav",  async (req, res) => {
   try {
     // Fetch all favourites from the database
     const allFavourites = await FavsModel.find();
@@ -151,7 +161,7 @@ app.get("/fav", authenticateToken, async (req, res) => {
 });
 
 // Route for getting a specific favourite by id
-app.get('/getFav/:id', authenticateToken, async (req, res) => {
+app.get('/getFav/:id',  async (req, res) => {
   try {
     const favouriteId = req.params.id;
     // Find favourite by id in the database
@@ -167,7 +177,7 @@ app.get('/getFav/:id', authenticateToken, async (req, res) => {
 });
 
 // Route for updating favourite data by id
-app.put('/updateFav/:id', authenticateToken, async (req, res) => {
+app.put('/updateFav/:id',  async (req, res) => {
   try {
     const favouriteId = req.params.id;
     // Assuming you receive the updated favourite data in req.body
@@ -184,7 +194,7 @@ app.put('/updateFav/:id', authenticateToken, async (req, res) => {
 });
 
 // Route for deleting a favourite by id
-app.delete('/deleteFav/:id', authenticateToken, async (req, res) => {
+app.delete('/deleteFav/:id',  async (req, res) => {
   try {
     const favouriteId = req.params.id;
     // Find favourite by id and delete from the database

@@ -16,54 +16,59 @@ function UserProfile() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const Response = await axios.post('http://localhost:8000/postUserData', formData);
       console.log(Response.data);
-      console.log('username0001', formData.email);
-      Cookies.set('useremail', formData.email);
-      // localStorage.setItem('userLocalStorage', formData.email)
+      
+      Cookies.set('accessToken', Response.data.accessToken);
+      localStorage.setItem('localuser', formData.name); // Save the user's name in local storage
+      
+      console.log("token", Cookies.get('accessToken'));
+  
+      setFormData({
+        name: '',
+        email: '',
+        password: ''
+      });
+  
       alert('User profile saved successfully!');
-      const userDataResponse = await axios.get('http://localhost:8000/getUserData');
-      console.log('User data:', userDataResponse.data);
-      console.log("cookie", Cookies.get('useremail')); // Logging the cookie value
-      // console.log("Local storage", localStorage.getItem(userLocalStorage))
-      console.log(formData.email);
-      navigate('/year') // Navigate to '/year' route
+      navigate('/year');
     } catch (error) {
-      alert(error.response.data.message); // Displaying the error message
+      alert(error.response.data.message);
       console.log(error.response.data.message);
     }
   };
 
   const handleSignOut = () => {
-    Cookies.remove('useremail'); // Remove the 'useremail' cookie
-    // localStorage.removeItem(userLocalStorage)
-    console.log("cookie", Cookies.get('useremail'));
-    // console.log("Local Storage", localStorage.getItem(userLocalStorage));
-    navigate('/year'); // Navigate to '/year' route
+    Cookies.remove('accessToken');
+    localStorage.removeItem('localuser'); // Remove the user's name from local storage
+    navigate('/');
   };
 
+  // Check if the user's name is present in local storage
+  const isLoggedIn = !!localStorage.getItem('localuser');
+
   return (
-    <div>
-      {!Cookies.get('useremail') ? (
+    <div id="user-profile-container">
+      {isLoggedIn ? ( // If the user is logged in, show the sign-out button
+        <button type="button" onClick={handleSignOut}>Sign Out</button>
+      ) : ( // Otherwise, show the form to enter user data
         <div>
           <h2>User Profile</h2>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="user-profile-form">
             <label>Name:</label>
             <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
             <label>Email:</label>
             <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
             <label>Password:</label>
-            <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required />
+            <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required /> <br />
             <button type="submit">Save Profile</button>
-            <Link to="/year"><button type="button">Close</button></Link>
+            <Link to="/" ><button type="button">Close</button></Link>
           </form>
         </div>
-      ) : (
-        <button type="button" onClick={handleSignOut}>Sign Out</button>
       )}
     </div>
   );

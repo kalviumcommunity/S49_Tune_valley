@@ -1,0 +1,26 @@
+.year-container {
+    margin-bottom: 20px;
+
+    
+  }
+  
+  .year-box {
+    display: flex;
+    flex-direction: row;
+    margin-left: 500px;
+  }
+  
+  .year-item {
+    margin-right: 10px;
+    cursor: pointer;
+
+  }
+  
+  .year-item span {
+    font-weight: normal;
+  }
+  
+  .year-item.active span {
+    font-weight: bold;
+  }
+  

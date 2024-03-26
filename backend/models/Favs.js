@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const FavsSchema = new mongoose.Schema({
     Artist: String,
     Song : String,
-    Album: String
+    Album: String,
+    username: String,
 
 })
 

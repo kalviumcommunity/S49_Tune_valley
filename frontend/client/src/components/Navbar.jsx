@@ -5,8 +5,10 @@ function Navbar() {
   return (
     <nav className="navbar">
     <span className="navbar-brand">TUNE VALLEY 🎹</span>
-    <Link to="/">Register</Link>
+    <Link to="/register">Register</Link>
     <Link to="/fav">Fav</Link>
+    <Link to= "/createdby" >Created_by</Link>
+    <Link to="/login" >login</Link>
   </nav>
   )
 }

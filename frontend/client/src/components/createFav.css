@@ -1,0 +1,54 @@
+/* CreateFav.css */
+.container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .form-container {
+    box-shadow: 0 4px 8px 0 rgb(246, 246, 246);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .form {
+    width: 400px;
+    padding: 30px;
+  }
+  
+  .header {
+    color: #ffffff;
+    font-size: 24px;
+    /* margin-bottom: 30px; */
+    text-align: center;
+  }
+  
+ 
+  
+  .label {
+    color: #ffffff;
+    display: block;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #282828;
+    color: #ffffff;
+  }
+  
+  .button {
+    background-color: #ff6b6b;
+    color: #ffffff;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    display: block;
+    font-size: 16px;
+  }
+  

@@ -14,6 +14,7 @@ function App() {
          .then(res => setData(res.data))
          .catch((err)=> console.error(err))
   },[])
+  //return jsx elem
   return (
     <>
       <Home/>

@@ -1,41 +1,45 @@
-import React from 'react'
-import './App.css'
-import Home from './components/Home.jsx'
-import Data from './components/Data.jsx'
-import { useEffect, useState } from 'react'
-import axios from 'axios'
+import React, { useState, useEffect } from 'react';
+import {Routes, Route} from 'react-router-dom'
+import './App.css';
+import axios from 'axios';
+import UserProfile from './components/UserProfile';
+import Year from './components/Year';
+import Fav from './components/Fav';
+import CreateFav from './components/CreateFav';
+import FavUpdate from './components/FavUpdate';
+import Login from './components/Login';
+import Navbar from './components/Navbar';
+import Createdby from './components/Createdby';
+import Home from './components/Home';
 
 function App() {
+  const [data, setData] = useState([]);
 
-  let [data, setData] = useState([])
-
-  useEffect(()=>{
+  useEffect(() => {
     axios.get('http://localhost:8000/getTunevalley')
+
          .then(res => setData(res.data))
          .catch((err)=> console.error(err))
   },[])
-  //return jsx elem
+
+
   return (
     <>
-      <Home/>
-      {/* <Data/> */}
-      <div>{data && data.map((item)=>{
-        return(
-          <div key={item._id}>
-            <h2 id='year'>Year:{item.Year}</h2> <hr />
-            <div>{item.Songs && item.Songs.map((itt)=>{
-              return(
-                <div key={itt._id}>
-                  <p>Song: {itt.Song}</p>
-                  <p>Artist: {itt.Artist}</p>
-                </div>
-              )
-            })}</div>
-          </div>
-        )
-      })}</div>
+    <Navbar/>
+      <Routes>
+        <Route path='/'element = {<Home/>}/>
+        {/* <Route path='/logout'element={<Logout/>}  ></Route> */}
+        <Route path='/register' element={ <UserProfile/>} />
+        <Route path='/year' element={ <Year data={data}/>} />
+        <Route path='/fav' element={<Fav/>} />
+        <Route path='/create' element={<CreateFav/>} />
+        <Route path='/update/:id' element={<FavUpdate />} />
+        <Route path='/createdby'element = {<Createdby/>} /> 
+        <Route path='/login' element = {<Login/>} />
+
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

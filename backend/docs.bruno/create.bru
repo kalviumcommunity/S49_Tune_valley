@@ -4,13 +4,16 @@ meta {
   seq: 1
 }
 
-post {
-  url: http://localhost:8000/crud/create
+get {
+  url: http://localhost:8000/fav/data
   body: json
   auth: none
 }
 
 body:json {
-  {"name":"rutuj ",
-  "discription":"somethinggggg"}
+  {
+    "artist":"cvbhn",
+    "song":"16",
+    "album":"dcfvgjbhuk"
+  }
 }

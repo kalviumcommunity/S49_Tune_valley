@@ -17,10 +17,10 @@ function App() {
 
   useEffect(() => {
     axios.get('http://localhost:8000/getTunevalley')
-      .then(res => setData(res.data))
-      .catch((err) => console.error(err));
-  }, []);
 
+         .then(res => setData(res.data))
+         .catch((err)=> console.error(err))
+  },[])
 
 
   return (

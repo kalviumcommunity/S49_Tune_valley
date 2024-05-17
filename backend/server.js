@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const MONGODB_URL = process.env.MONGODB_URL;
 // const bodyParser = require('body-parser'); // middleware for parsing request bodies
 const app = express();
-const cors =require('cors')//Cross-origin resource sharing 
+
 const port = 8000;
 
 // Import CRUD routes

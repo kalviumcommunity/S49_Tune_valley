@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const TunevalleyUserSchema = new mongoose.Schema({
-    Name: String,
+    username: String,
     Email : String,
     password: String
 

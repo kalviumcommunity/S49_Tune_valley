@@ -21,7 +21,6 @@ const FavsModel = require('./models/Favs.js');
 // app.use(bodyParser.json());
 app.use(cors())
 app.use(express.json())
-
 app.use("/crud",router)
 
 // Connect to MongoDB

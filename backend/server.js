@@ -85,7 +85,7 @@ const schema = Joi.object({
   password:Joi.string().min(6).required()
 })
 
-app.post('/postUserData', async (req,res) =>{
+app.post('/postUserData/login', async (req,res) =>{
   let x= req.body
   console.log("data",x)
   const {error} = schema.validate(req.body)
